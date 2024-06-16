@@ -21,7 +21,7 @@ RUN apt-get update \
         libxslt-dev \
         default-libmysqlclient-dev \
     && rm -rf /var/lib/apt/lists/* \
-# Cài đặt các extension PHP cần thiết
+    # Cài đặt các extension PHP cần thiết
     && docker-php-ext-install -j$(nproc) \
         soap \
         gd \
@@ -44,8 +44,8 @@ EXPOSE 80
 ENV APACHE_DOCUMENT_ROOT /var/www/html
 
 # Cấu hình máy chủ web Apache
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 # Khởi động Apache trong chế độ foreground
 CMD ["apache2-foreground"]
