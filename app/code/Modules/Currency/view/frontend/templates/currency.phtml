@@ -1,0 +1,32 @@
+<?php
+$currencies = $block->getCurrencyData();
+?>
+<style>
+    table {  font-family: arial, sans-serif;  border-collapse: collapse;  width: 100%;  margin-top: 30px;}
+    td, th {  border: 1px solid #dddddd;  text-align: left;  padding: 8px;  }
+    .unit {
+        text-align: right;
+        width: 100%;
+    }
+</style>
+<div class="unit">Đơn vị: VND</div>
+<table>
+    <thead>
+        <tr>
+            <th>Currency</th>
+            <th>Buy</th>
+            <th>Sell</th>
+            <th>Transfer</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($currencies as $currency) { ?>
+            <tr>
+                <td><img src="https://fxtop.com/ico/<?php echo $currency['currency_code']; ?>.gif" alt="Currency Icon"><?php echo " {$currency['currency_code']} - {$currency['currency_name']}"; ?></td>
+                <td><?php echo $currency['buy']; ?></td>
+                <td><?php echo $currency['sell']; ?></td>
+                <td><?php echo $currency['transfer']; ?></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
