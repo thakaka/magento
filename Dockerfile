@@ -18,10 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxml2-dev \
     libzip-dev \
     libxslt-dev \
-    default-libmysqlclient-dev
-
-# Dọn dẹp các gói không cần thiết sau khi cài đặt
-RUN rm -rf /var/lib/apt/lists/*
+    default-libmysqlclient-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Cài đặt các extension PHP cần thiết
 RUN docker-php-ext-install -j$(nproc) \
@@ -30,8 +28,10 @@ RUN docker-php-ext-install -j$(nproc) \
     intl \
     sockets \
     zip \
-    xsl
+    xsl \
+    pdo_mysql
 
+# Kích hoạt các extension PHP
 RUN docker-php-ext-enable pdo_mysql
 
 # Cài đặt Composer
