@@ -19,14 +19,14 @@ RUN apt-get update \
         libxml2-dev \
         libzip-dev \
     && rm -rf /var/lib/apt/lists/* \
-    
 # Cài đặt các extension PHP cần thiết
-RUN docker-php-ext-install -j$(nproc) \
+    && docker-php-ext-install -j$(nproc) \
         soap \
         gd \
         intl \
         sockets \
         zip
+
 
 # Xóa bỏ các tập tin không cần thiết và cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
