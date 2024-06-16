@@ -37,6 +37,10 @@ RUN docker-php-ext-enable pdo_mysql
 # Cài đặt Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Tạo thư mục .composer và thiết lập thông tin xác thực cho Composer
+RUN mkdir -p /root/.composer
+COPY auth.json /root/.composer/auth.json
+
 # Cài đặt các dependency của Magento bằng Composer
 RUN composer install --no-dev --prefer-dist --optimize-autoloader --ignore-platform-req=ext-xsl --ignore-platform-req=ext-pdo_mysql
 
