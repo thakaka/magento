@@ -24,6 +24,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     default-libmysqlclient-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Install wait-for-it
+RUN curl -LJO https://github.com/vishnubob/wait-for-it/raw/master/wait-for-it.sh && \
+    mv wait-for-it.sh /usr/local/bin/wait-for-it && \
+    chmod +x /usr/local/bin/wait-for-it
+    
 # Cài đặt các extension PHP cần thiết
 RUN docker-php-ext-install -j$(nproc) \
     soap \
