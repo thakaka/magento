@@ -31,7 +31,7 @@ RUN apt-get update \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Cài đặt các dependency của Magento bằng Composer
-RUN composer install --no-dev --prefer-dist --optimize-autoloader
+RUN composer install --no-dev --prefer-dist --optimize-autoloader --ignore-platform-req=ext-xsl --ignore-platform-req=ext-pdo_mysql
 
 # Mở cổng 80 để container có thể truy cập từ bên ngoài
 EXPOSE 80
