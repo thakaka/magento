@@ -27,15 +27,11 @@ RUN apt-get update \
         sockets \
         zip
 
-
-# Xóa bỏ các tập tin không cần thiết và cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # Cài đặt Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Cài đặt các dependency của Magento bằng Composer
-RUN composer install
+RUN composer install --no-dev --prefer-dist --optimize-autoloader
 
 # Mở cổng 80 để container có thể truy cập từ bên ngoài
 EXPOSE 80
