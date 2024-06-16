@@ -18,8 +18,8 @@ RUN apt-get update \
         libicu-dev \
         libxml2-dev \
         libzip-dev \
-        libxslt-dev \  # Thêm extension xsl
-        default-mysql-client \  # Thêm client MySQL
+        libxslt-dev \
+        default-mysql-client \
     && rm -rf /var/lib/apt/lists/* \
 # Cài đặt các extension PHP cần thiết
     && docker-php-ext-install -j$(nproc) \
@@ -28,14 +28,14 @@ RUN apt-get update \
         intl \
         sockets \
         zip \
-        xsl \  # Cài đặt extension xsl
-    && docker-php-ext-enable pdo_mysql  # Kích hoạt extension pdo_mysql
+        xsl \
+    && docker-php-ext-enable pdo_mysql
 
 # Cài đặt Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Cài đặt các dependency của Magento bằng Composer
-RUN composer install --no-dev --prefer-dist --optimize-autoloader
+RUN composer install --no-dev --prefer-dist --optimize-autoloader --ignore-platform-req=ext-xsl --ignore-platform-req=ext-pdo_mysql
 
 # Mở cổng 80 để container có thể truy cập từ bên ngoài
 EXPOSE 80
