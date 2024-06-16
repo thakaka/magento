@@ -20,7 +20,7 @@ RUN apt-get update \
         libzip-dev \
         libxslt-dev \
         default-libmysqlclient-dev \
-    && rm -rf /var/lib/apt/lists/* \  # Di chuyển lệnh này xuống đây hoặc tách thành lệnh riêng biệt
+    && rm -rf /var/lib/apt/lists/* \
 # Cài đặt các extension PHP cần thiết
     && docker-php-ext-install -j$(nproc) \
         soap \
