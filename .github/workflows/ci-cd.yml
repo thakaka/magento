@@ -67,24 +67,25 @@ jobs:
 
     - name: Run Magento tests
       run: |
-        docker exec -it $(docker ps -q -f name=fpm) bin/magento setup:install \
+        docker exec -i $(docker ps -q -f name=fpm) bin/magento setup:install \
           --base-url=http://localhost \
           --db-host=db \
           --db-name=magento2 \
           --db-user=magento2 \
-          --db-password=magento2 \
+          --db-password=your_db_password \
           --admin-firstname=Admin \
           --admin-lastname=User \
           --admin-email=admin@example.com \
           --admin-user=admin \
-          --admin-password=admin123 \
+          --admin-password=your_admin_password \
           --language=en_US \
           --currency=USD \
           --timezone=America/Chicago \
           --use-rewrites=1
-        docker exec -it $(docker ps -q -f name=fpm) bin/magento setup:di:compile
-        docker exec -it $(docker ps -q -f name=fpm) bin/magento setup:static-content:deploy -f
-        docker exec -it $(docker ps -q -f name=fpm) bin/magento run:tests
+
+        docker exec -i $(docker ps -q -f name=fpm) bin/magento setup:di:compile
+        docker exec -i $(docker ps -q -f name=fpm) bin/magento setup:static-content:deploy -f
+        docker exec -i $(docker ps -q -f name=fpm) bin/magento run:tests
 
     - name: Shut down Docker Compose
       run: docker-compose -f docker-compose.yml down
