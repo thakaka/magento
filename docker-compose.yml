@@ -1,4 +1,5 @@
 version: '2.1'
+
 services:
   db:
     hostname: db.magento2.docker
@@ -38,7 +39,6 @@ services:
       db:
         condition: service_healthy
     command: /app/scripts/wait-for-it.sh db:3306 --timeout=60 -- docker-entrypoint.sh php-fpm
-
 
   web:
     hostname: web.magento2.docker
@@ -86,7 +86,6 @@ services:
     depends_on:
       - db
 
-  services:
   redis:
     hostname: redis.magento2.docker
     image: 'redis:6.2'
@@ -110,7 +109,6 @@ services:
       magento:
         aliases:
           - redis.magento2.docker
-
 
   tls:
     hostname: tls.magento2.docker
