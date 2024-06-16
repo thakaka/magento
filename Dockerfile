@@ -7,6 +7,9 @@ WORKDIR /var/www/html
 # Copy các tập tin từ thư mục hiện tại vào container tại đường dẫn /var/www/html
 COPY . .
 
+# Thay đổi quyền thực thi cho bin/magento
+RUN chmod +x bin/magento
+
 # Cài đặt các gói cần thiết
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
