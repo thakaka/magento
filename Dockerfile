@@ -18,8 +18,8 @@ RUN apt-get update \
         libicu-dev \
         libxml2-dev \
         libzip-dev \
-        libxslt-dev \  # Thêm extension xsl
-        default-mysql-client \  # Thêm client MySQL
+        libxslt-dev \
+        default-libmysqlclient-dev \   # Sử dụng default-libmysqlclient-dev thay vì default-mysql-client
     && rm -rf /var/lib/apt/lists/* \
 # Cài đặt các extension PHP cần thiết
     && docker-php-ext-install -j$(nproc) \
