@@ -63,29 +63,35 @@ jobs:
         tags: myapp:${{ github.sha }}
 
     - name: Run Docker Compose
-      run: docker-compose -f docker-compose.yml up -d
-
-    - name: Run Magento tests
       run: |
-        docker exec -i $(docker ps -q -f name=fpm) bin/magento setup:install \
+        docker-compose -f docker-compose.yml up -d
+
+    - name: Wait for services to be ready
+      run: |
+        docker-compose -f docker-compose.yml exec -T fpm wait-for-it db:3306 --timeout=60 -- echo "MySQL is up"
+
+    - name: Run Magento setup commands
+      run: |
+        docker-compose -f docker-compose.yml exec -T fpm bin/magento setup:install \
           --base-url=http://localhost \
           --db-host=db \
           --db-name=magento2 \
           --db-user=magento2 \
-          --db-password=your_db_password \
+          --db-password=magento2 \
           --admin-firstname=Admin \
           --admin-lastname=User \
           --admin-email=admin@example.com \
           --admin-user=admin \
-          --admin-password=your_admin_password \
+          --admin-password=admin123 \
           --language=en_US \
           --currency=USD \
           --timezone=America/Chicago \
           --use-rewrites=1
 
-        docker exec -i $(docker ps -q -f name=fpm) bin/magento setup:di:compile
-        docker exec -i $(docker ps -q -f name=fpm) bin/magento setup:static-content:deploy -f
-        docker exec -i $(docker ps -q -f name=fpm) bin/magento run:tests
+        docker-compose -f docker-compose.yml exec -T fpm bin/magento setup:di:compile
+        docker-compose -f docker-compose.yml exec -T fpm bin/magento setup:static-content:deploy -f
+        docker-compose -f docker-compose.yml exec -T fpm bin/magento run:tests
 
     - name: Shut down Docker Compose
-      run: docker-compose -f docker-compose.yml down
+      run: |
+        docker-compose -f docker-compose.yml down
