@@ -8,28 +8,31 @@ WORKDIR /var/www/html
 COPY . .
 
 # Cài đặt các gói cần thiết
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        git \
-        unzip \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libpng-dev \
-        libicu-dev \
-        libxml2-dev \
-        libzip-dev \
-        libxslt-dev \
-        default-libmysqlclient-dev \
-    && rm -rf /var/lib/apt/lists/* \
-    # Cài đặt các extension PHP cần thiết
-    && docker-php-ext-install -j$(nproc) \
-        soap \
-        gd \
-        intl \
-        sockets \
-        zip \
-        xsl \
-    && docker-php-ext-enable pdo_mysql
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    unzip \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libicu-dev \
+    libxml2-dev \
+    libzip-dev \
+    libxslt-dev \
+    default-libmysqlclient-dev
+
+# Dọn dẹp các gói không cần thiết sau khi cài đặt
+RUN rm -rf /var/lib/apt/lists/*
+
+# Cài đặt các extension PHP cần thiết
+RUN docker-php-ext-install -j$(nproc) \
+    soap \
+    gd \
+    intl \
+    sockets \
+    zip \
+    xsl
+
+RUN docker-php-ext-enable pdo_mysql
 
 # Cài đặt Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
