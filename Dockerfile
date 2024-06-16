@@ -1,34 +1,51 @@
-# Use an official PHP runtime as a parent image
+# Sử dụng image chính thức của PHP làm parent image
 FROM php:8.1-apache
 
-# Set the working directory in the container
+# Thiết lập thư mục làm việc trong container
 WORKDIR /var/www/html
 
-# Copy the current directory contents into the container at /var/www/html
+# Copy các tập tin từ thư mục hiện tại vào container tại đường dẫn /var/www/html
 COPY . .
 
-# Install any needed packages
+# Cài đặt các gói cần thiết
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         git \
         unzip \
-    && rm -rf /var/lib/apt/lists/*
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
+        libicu-dev \
+        libxml2-dev \
+        libzip-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    
+# Cài đặt các extension PHP cần thiết
+RUN docker-php-ext-install -j$(nproc) \
+        soap \
+        gd \
+        intl \
+        sockets \
+        zip
 
-# Install Composer
+# Xóa bỏ các tập tin không cần thiết và cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Cài đặt Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install Magento dependencies using Composer
+# Cài đặt các dependency của Magento bằng Composer
 RUN composer install
 
-# Make port 80 available to the world outside this container
+# Mở cổng 80 để container có thể truy cập từ bên ngoài
 EXPOSE 80
 
-# Define environment variables
+# Định nghĩa các biến môi trường
 ENV APACHE_DOCUMENT_ROOT /var/www/html
 
-# Configure Apache web server
+# Cấu hình máy chủ web Apache
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Start Apache in the foreground
+# Khởi động Apache trong chế độ foreground
 CMD ["apache2-foreground"]
